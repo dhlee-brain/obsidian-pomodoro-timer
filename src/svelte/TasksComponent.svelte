@@ -1,8 +1,8 @@
 <script lang="ts">
-import TaskItemComponent from 'TaskItemComponent.svelte'
-import type TaskTracker from 'TaskTracker'
-import Tasks, { type TaskItem } from 'Tasks'
-import { settings } from 'stores'
+import TaskItemComponent from './TaskItemComponent.svelte'
+import type TaskTracker from '../TaskTracker'
+import Tasks, { type TaskItem } from '../Tasks'
+import { settings } from '../stores'
 import { Menu } from 'obsidian'
 
 export let tasks: Tasks
@@ -123,9 +123,7 @@ const showTaskMenu = (task: TaskItem) => (e: MouseEvent) => {
                             stroke-linejoin="round"
                             class="lucide lucide-pin"
                             ><line x1="12" x2="12" y1="17" y2="22" /><path
-                                d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z"
-                            /></svg
-                        >
+                                d="M5 17h14v-1.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V6h1a2 2 0 0 0 0-4H8a2 2 0 0 0 0 4h1v4.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24Z" /></svg>
                     {:else}
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -142,11 +140,9 @@ const showTaskMenu = (task: TaskItem) => (e: MouseEvent) => {
                                 x1="12"
                                 x2="12"
                                 y1="17"
-                                y2="22"
-                            /><path
-                                d="M9 9v1.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V17h12"
-                            /><path d="M15 9.34V6h1a2 2 0 0 0 0-4H7.89" /></svg
-                        >
+                                y2="22" /><path
+                                d="M9 9v1.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V17h12" /><path
+                                d="M15 9.34V6h1a2 2 0 0 0 0-4H7.89" /></svg>
                     {/if}
                 </span>
                 <span class="pomodoro-tasks-file-name" on:click={openFile}>
@@ -164,12 +160,10 @@ const showTaskMenu = (task: TaskItem) => (e: MouseEvent) => {
                                 <input
                                     type="text"
                                     value={$tracker.task?.name}
-                                    on:input={changeTaskName}
-                                />
+                                    on:input={changeTaskName} />
                                 <span
                                     class="pomodoro-tasks-remove"
-                                    on:click={removeTask}
-                                >
+                                    on:click={removeTask}>
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         width="12"
@@ -182,9 +176,7 @@ const showTaskMenu = (task: TaskItem) => (e: MouseEvent) => {
                                         stroke-linejoin="round"
                                         class="lucide lucide-x"
                                         ><path d="M18 6 6 18" /><path
-                                            d="m6 6 12 12"
-                                        /></svg
-                                    >
+                                            d="m6 6 12 12" /></svg>
                                 </span>
                             </div>
                         </div>
@@ -196,28 +188,24 @@ const showTaskMenu = (task: TaskItem) => (e: MouseEvent) => {
                             on:click={() => (status = '')}
                             class="pomodoro-tasks-filter {status === ''
                                 ? 'filter-active'
-                                : ''}">All</span
-                        >
+                                : ''}">All</span>
                         <span
                             on:click={() => (status = 'todo')}
                             class="pomodoro-tasks-filter {status === 'todo'
                                 ? 'filter-active'
-                                : ''}">Todo</span
-                        >
+                                : ''}">Todo</span>
                         <span
                             on:click={() => (status = 'completed')}
                             class="pomodoro-tasks-filter {status === 'completed'
                                 ? 'filter-active'
-                                : ''}">Completed</span
-                        >
+                                : ''}">Completed</span>
                     </div>
                 </div>
                 <div class="pomodoro-tasks-text-filter">
                     <input
                         type="text"
                         bind:value={query}
-                        placeholder="Search..."
-                    />
+                        placeholder="Search..." />
                 </div>
             {/if}
         </div>
@@ -234,8 +222,7 @@ const showTaskMenu = (task: TaskItem) => (e: MouseEvent) => {
                         )}%, transparent 0%)"
                         class="pomodoro-tasks-item {item.checked
                             ? 'pomodoro-tasks-checked'
-                            : ''}"
-                    >
+                            : ''}">
                         <div class="pomodoro-tasks-name">
                             {#if item.checked}
                                 <svg
@@ -249,8 +236,7 @@ const showTaskMenu = (task: TaskItem) => (e: MouseEvent) => {
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
                                     class="lucide lucide-check"
-                                    ><path d="M20 6 9 17l-5-5" /></svg
-                                >
+                                    ><path d="M20 6 9 17l-5-5" /></svg>
                             {:else}
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -263,13 +249,11 @@ const showTaskMenu = (task: TaskItem) => (e: MouseEvent) => {
                                     stroke-linecap="round"
                                     stroke-linejoin="round"
                                     class="lucide lucide-circle"
-                                    ><circle cx="12" cy="12" r="10" /></svg
-                                >
+                                    ><circle cx="12" cy="12" r="10" /></svg>
                             {/if}
                             <TaskItemComponent
                                 render={r}
-                                content={item.description}
-                            />
+                                content={item.description} />
                         </div>
                         <div class="pomodoro-tasks-progress">
                             {progressText(item)}

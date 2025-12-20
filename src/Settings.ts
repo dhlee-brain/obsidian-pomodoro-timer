@@ -1,5 +1,4 @@
 import type PomodoroTimerPlugin from 'main'
-import { DropdownComponent } from 'obsidian'
 import { PluginSettingTab, Setting, moment } from 'obsidian'
 import type { Unsubscriber } from 'svelte/motion'
 import { writable, type Writable } from 'svelte/store'
@@ -17,6 +16,7 @@ export type TaskFormat = 'TASKS' | 'DATAVIEW'
 export interface Settings {
     workLen: number
     breakLen: number
+    meditateLen: number
     autostart: boolean
     useStatusBarTimer: boolean
     notificationSound: boolean
@@ -38,6 +38,7 @@ export default class PomodoroSettings extends PluginSettingTab {
     static readonly DEFAULT_SETTINGS: Settings = {
         workLen: 25,
         breakLen: 5,
+        meditateLen: 20,
         autostart: false,
         useStatusBarTimer: false,
         notificationSound: true,
@@ -111,15 +112,17 @@ export default class PomodoroSettings extends PluginSettingTab {
                 })
             })
 
-		new Setting(containerEl)
-			.setName('Low Animation FPS')
-			.setDesc("If you encounter high CPU usage, you can enable this option to lower the animation FPS to save CPU resources")
-			.addToggle((toggle) => {
-				toggle.setValue(this._settings.lowFps)
-				toggle.onChange((value: boolean) => {
-					this.updateSettings({ lowFps: value })
-				})
-			})
+        new Setting(containerEl)
+            .setName('Low Animation FPS')
+            .setDesc(
+                'If you encounter high CPU usage, you can enable this option to lower the animation FPS to save CPU resources',
+            )
+            .addToggle((toggle) => {
+                toggle.setValue(this._settings.lowFps)
+                toggle.onChange((value: boolean) => {
+                    this.updateSettings({ lowFps: value })
+                })
+            })
 
         new Setting(containerEl).setHeading().setName('Notification')
 
@@ -277,7 +280,6 @@ export default class PomodoroSettings extends PluginSettingTab {
                         )
                     })
                 })
-
 
             if (this._settings.logFormat == 'CUSTOM') {
                 const logTemplate = new Setting(containerEl).setName(

@@ -1,5 +1,5 @@
 import { ItemView, WorkspaceLeaf } from 'obsidian'
-import TimerComponent from './TimerViewComponent.svelte'
+import TimerComponent from 'svelte/TimerViewComponent.svelte'
 import PomodoroTimerPlugin from 'main'
 import { MarkdownRenderer } from 'obsidian'
 
@@ -27,9 +27,9 @@ export class TimerView extends ItemView {
         this.component = new TimerComponent({
             target: this.contentEl,
             props: {
-                timer: this.plugin.timer,
-                tasks: this.plugin.tasks,
-                tracker: this.plugin.tracker,
+                timer: this.plugin.timer!,
+                tasks: this.plugin.tasks!,
+                tracker: this.plugin.tracker!,
                 render: (content: string, el: HTMLElement) => {
                     MarkdownRenderer.render(
                         this.plugin.app,
@@ -38,7 +38,7 @@ export class TimerView extends ItemView {
                         '',
                         this,
                     )
-                }
+                },
             },
         })
     }

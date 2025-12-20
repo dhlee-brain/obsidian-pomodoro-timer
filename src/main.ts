@@ -1,7 +1,6 @@
 import { TimerView, VIEW_TYPE_TIMER } from 'TimerView'
 import { Notice, Plugin, WorkspaceLeaf } from 'obsidian'
 import PomodoroSettings, { type Settings } from 'Settings'
-import StatusBar from 'StatusBarComponent.svelte'
 import Timer from 'Timer'
 import Tasks from 'Tasks'
 import TaskTracker from 'TaskTracker'
@@ -35,11 +34,6 @@ export default class PomodoroTimerPlugin extends Plugin {
                 this.activateView()
             }
         })
-
-        // status bar
-        const status = this.addStatusBarItem()
-        status.className = `${status.className} mod-clickable`
-        new StatusBar({ target: status, props: { store: this.timer } })
 
         // commands
         this.addCommand({
@@ -94,8 +88,9 @@ export default class PomodoroTimerPlugin extends Plugin {
         this.settingTab?.unload()
         this.timer?.destroy()
         this.tasks?.destroy()
-        this.tracker?.destory()
+        this.tracker?.destroy()
     }
+
     async activateView() {
         let { workspace } = this.app
 

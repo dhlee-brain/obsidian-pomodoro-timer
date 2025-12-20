@@ -165,7 +165,7 @@ export default class TaskTracker implements TaskTrackerStore {
 
     public finish() {}
 
-    public destory() {
+    public destroy() {
         for (let unsub of this.unsubscribers) {
             unsub()
         }

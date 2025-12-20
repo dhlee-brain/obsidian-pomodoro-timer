@@ -1,6 +1,6 @@
 <script lang="ts">
-import TasksComponent from 'TasksComponent.svelte'
-import TimerSettingsComponent from 'TimerSettingsComponent.svelte'
+import TasksComponent from './TasksComponent.svelte'
+import TimerSettingsComponent from './TimerSettingsComponent.svelte'
 import type Timer from 'Timer'
 import type Tasks from 'Tasks'
 import type TaskTracker from 'TaskTracker'

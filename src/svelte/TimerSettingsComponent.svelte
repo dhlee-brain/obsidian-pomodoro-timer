@@ -1,5 +1,5 @@
 <script lang="ts">
-import { settings } from 'stores'
+import { settings } from '../stores'
 
 const updateWorkLen = (e: Event) => {
     const target = e.target as HTMLInputElement
@@ -20,7 +20,19 @@ const updateBreakLen = (e: Event) => {
         if (value >= 0) {
             s.breakLen = value
         }
-        target.value = s.workLen.toString()
+        target.value = s.breakLen.toString()
+        return s
+    })
+}
+
+const updateMeditateLen = (e: Event) => {
+    const target = e.target as HTMLInputElement
+    const value = parseInt(target.value)
+    settings.update((s) => {
+        if (value >= 0) {
+            s.meditateLen = value
+        }
+        target.value = s.meditateLen.toString()
         return s
     })
 }
@@ -35,8 +47,7 @@ const updateBreakLen = (e: Event) => {
                     value={$settings.workLen}
                     on:change={updateWorkLen}
                     min="1"
-                    type="number"
-                />
+                    type="number" />
             </div>
         </div>
         <div class="pomodoro-settings-item">
@@ -46,8 +57,17 @@ const updateBreakLen = (e: Event) => {
                     value={$settings.breakLen}
                     on:change={updateBreakLen}
                     min="0"
-                    type="number"
-                />
+                    type="number" />
+            </div>
+        </div>
+        <div class="pomodoro-settings-item">
+            <div class="pomodoro-settings-label">Meditate</div>
+            <div class="pomodoro-settings-control">
+                <input
+                    value={$settings.meditateLen}
+                    on:change={updateMeditateLen}
+                    min="0"
+                    type="number" />
             </div>
         </div>
         <div class="pomodoro-settings-item">
@@ -61,8 +81,7 @@ const updateBreakLen = (e: Event) => {
             <div class="pomodoro-settings-control">
                 <input
                     type="checkbox"
-                    bind:checked={$settings.notificationSound}
-                />
+                    bind:checked={$settings.notificationSound} />
             </div>
         </div>
         <div class="pomodoro-settings-item">
