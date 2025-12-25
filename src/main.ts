@@ -44,7 +44,7 @@ export default class PomodoroTimerPlugin extends Plugin {
             },
         })
 
-        this.addComand({
+        this.addComandfdd({
             id: 'toggle-timer-panel',
             name: 'Toggle timer panel',
             callback: () => {
