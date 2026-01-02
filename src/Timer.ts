@@ -9,7 +9,7 @@ import DEFAULT_NOTIFICATION from 'Notification'
 import type { Unsubscriber } from 'svelte/motion'
 import type { TaskItem } from 'Tasks'
 
-export type Mode = 'WORK' | 'BREAK'
+export type Mode = 'WORK' | 'BREAK' | 'MEDITATE' // Mode 추가
 
 export type TimerRemained = {
     millis: number
@@ -42,13 +42,13 @@ const DEFAULT_TASK: TaskItem = {
 export type TimerState = {
     autostart: boolean
     running: boolean
-    // lastTick: number
     mode: Mode
     elapsed: number
     startTime: number | null
     inSession: boolean
     workLen: number
     breakLen: number
+    meditateLen: number
     count: number
     duration: number
 }
@@ -85,8 +85,8 @@ export default class Timer implements Readable<TimerStore> {
             autostart: plugin.getSettings().autostart,
             workLen: plugin.getSettings().workLen,
             breakLen: plugin.getSettings().breakLen,
+            meditateLen: plugin.getSettings().meditateLen,
             running: false,
-            // lastTick: 0,
             mode: 'WORK',
             elapsed: 0,
             startTime: null,
@@ -107,8 +107,8 @@ export default class Timer implements Readable<TimerStore> {
 
         this.subscribe = this.store.subscribe
         this.unsubscribers.push(
-            this.store.subscribe((state) => {
-                this.state = state
+            this.store.subscribe((store) => {
+                this.state = store
             }),
         )
         this.clock = Worker()
@@ -213,9 +213,19 @@ export default class Timer implements Readable<TimerStore> {
         if (state.breakLen == 0) {
             state.mode = 'WORK'
         } else {
-            state.mode = state.mode == 'WORK' ? 'BREAK' : 'WORK'
+            state.mode =
+                state.mode == 'WORK'
+                    ? 'BREAK'
+                    : state.mode == 'BREAK'
+                      ? 'MEDITATE'
+                      : 'WORK'
         }
-        state.duration = state.mode == 'WORK' ? state.workLen : state.breakLen
+        state.duration =
+            state.mode == 'WORK'
+                ? state.workLen
+                : state.mode == 'BREAK'
+                  ? state.breakLen
+                  : state.meditateLen
         state.count = state.duration * 60 * 1000
         state.inSession = false
         state.running = false
@@ -229,9 +239,14 @@ export default class Timer implements Readable<TimerStore> {
     }
 
     private notify(state: TimerState, logFile: TFile | void) {
-        const emoji = state.mode == 'WORK' ? '🍅' : '🥤'
+        const emoji =
+            state.mode == 'WORK' ? '📘' : state.mode == 'BREAK' ? '☕' : '🧘‍♂️'
         const text = `${emoji} You have been ${
-            state.mode === 'WORK' ? 'working' : 'breaking'
+            state.mode === 'WORK'
+                ? 'working'
+                : state.mode == 'BREAK'
+                  ? 'breaking'
+                  : 'meditating'
         } for ${state.duration} minutes.`
 
         if (this.plugin.getSettings().useSystemNotification) {
@@ -333,13 +348,19 @@ export default class Timer implements Readable<TimerStore> {
 
     public setupTimer() {
         this.update((state) => {
-            const { workLen, breakLen, autostart } = this.plugin.getSettings()
+            const { workLen, breakLen, meditateLen, autostart } =
+                this.plugin.getSettings()
             state.workLen = workLen
             state.breakLen = breakLen
+            state.meditateLen = meditateLen
             state.autostart = autostart
             if (!state.running && !state.inSession) {
                 state.duration =
-                    state.mode == 'WORK' ? state.workLen : state.breakLen
+                    state.mode == 'WORK'
+                        ? state.workLen
+                        : state.mode == 'BREAK'
+                          ? state.breakLen
+                          : state.meditateLen
                 state.count = state.duration * 60 * 1000
             }
 
