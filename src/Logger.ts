@@ -161,12 +161,17 @@ export default class Logger {
             }
 
             if (settings.logFormat === 'VERBOSE') {
-                const emoji = log.mode == 'WORK' ? '🍅' : '🥤'
+                const emoji =
+                    log.mode == 'WORK'
+                        ? '📘'
+                        : log.mode == 'BREAK'
+                          ? '☕'
+                          : '🧘‍♂️'
                 return `- ${emoji} (pomodoro::${log.mode}) (duration:: ${
                     log.duration
                 }m) (begin:: ${begin.format(
-                    'YYYY-MM-DD HH:mm',
-                )}) - (end:: ${end.format('YYYY-MM-DD HH:mm')})`
+                    'YYMMDD HH:mm',
+                )}) - (end:: ${end.format('YYMMDD HH:mm')})`
             }
 
             return ''

@@ -9,7 +9,7 @@ import {
 } from 'utils'
 
 type LogFileType = 'DAILY' | 'WEEKLY' | 'FILE' | 'NONE'
-type LogLevel = 'ALL' | 'WORK' | 'BREAK'
+type LogLevel = 'ALL' | 'WORK' | 'BREAK' | 'MEDITATE'
 type LogFormat = 'SIMPLE' | 'VERBOSE' | 'CUSTOM'
 export type TaskFormat = 'TASKS' | 'DATAVIEW'
 
@@ -239,6 +239,7 @@ export default class PomodoroSettings extends PluginSettingTab {
                         ALL: 'All',
                         WORK: 'Work',
                         BREAK: 'Break',
+                        MEDITATE: 'Meditate',
                     })
                     dropdown.setValue(this._settings.logLevel)
                     dropdown.onChange((value: string) => {
@@ -255,10 +256,10 @@ export default class PomodoroSettings extends PluginSettingTab {
                     .format('HH:mm')} - ${moment().format('HH:mm')}`
             }
             if (this._settings.logFormat == 'VERBOSE') {
-                example = `- 🍅 (pomodoro::WORK) (duration:: 25m) (begin:: ${moment()
+                example = `- 📘 (pomodoro::WORK) (duration:: 25m) (begin:: ${moment()
                     .subtract(25, 'minutes')
-                    .format('YYYY-MM-DD HH:mm')}) - (end:: ${moment().format(
-                    'YYYY-MM-DD HH:mm',
+                    .format('YYMMDD HH:mm')}) - (end:: ${moment().format(
+                    'YYMMDD HH:mm',
                 )})`
             }
             new Setting(containerEl)

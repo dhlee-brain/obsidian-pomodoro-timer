@@ -194,7 +194,12 @@ export default class Timer implements Readable<TimerStore> {
             if (!s.inSession) {
                 // new session
                 s.elapsed = 0
-                s.duration = s.mode === 'WORK' ? s.workLen : s.breakLen
+                s.duration =
+                    s.mode === 'WORK'
+                        ? s.workLen
+                        : s.mode === 'BREAK'
+                          ? s.breakLen
+                          : s.meditateLen
                 s.count = s.duration * 60 * 1000
                 s.startTime = now
             }
@@ -299,7 +304,11 @@ export default class Timer implements Readable<TimerStore> {
             }
 
             state.duration =
-                state.mode == 'WORK' ? state.workLen : state.breakLen
+                state.mode == 'WORK'
+                    ? state.workLen
+                    : state.mode == 'BREAK'
+                      ? state.breakLen
+                      : state.meditateLen
             state.count = state.duration * 60 * 1000
             state.inSession = false
             state.running = false
