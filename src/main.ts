@@ -4,6 +4,7 @@ import PomodoroSettings, { type Settings } from 'Settings'
 import Timer from 'Timer'
 import Tasks from 'Tasks'
 import TaskTracker from 'TaskTracker'
+import StatusBar from 'svelte/StatusBarComponent.svelte'
 
 export default class PomodoroTimerPlugin extends Plugin {
     private settingTab?: PomodoroSettings
@@ -34,6 +35,11 @@ export default class PomodoroTimerPlugin extends Plugin {
                 this.activateView()
             }
         })
+
+        // status bar
+        const status = this.addStatusBarItem()
+        status.className = `${status.className} mod-clickable`
+        new StatusBar({ target: status, props: { store: this.timer } })
 
         // commands
         this.addCommand({
@@ -79,9 +85,7 @@ export default class PomodoroTimerPlugin extends Plugin {
     }
 
     public getSettings(): Settings {
-        return (
-            this.settingTab?.getSettings() || PomodoroSettings.DEFAULT_SETTINGS
-        )
+        return this.settingTab?.getSettings() || PomodoroSettings.DEFAULT_SETTINGS
     }
 
     onunload() {
