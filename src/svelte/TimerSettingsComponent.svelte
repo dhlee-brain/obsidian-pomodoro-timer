@@ -43,31 +43,19 @@ const updateMeditateLen = (e: Event) => {
         <div class="pomodoro-settings-item">
             <div class="pomodoro-settings-label">Work</div>
             <div class="pomodoro-settings-control">
-                <input
-                    value={$settings.workLen}
-                    on:change={updateWorkLen}
-                    min="1"
-                    type="number" />
+                <input type="number" min="1" bind:value={$settings.workLen} />
             </div>
         </div>
         <div class="pomodoro-settings-item">
             <div class="pomodoro-settings-label">Break</div>
             <div class="pomodoro-settings-control">
-                <input
-                    value={$settings.breakLen}
-                    on:change={updateBreakLen}
-                    min="0"
-                    type="number" />
+                <input type="number" min="0" bind:value={$settings.breakLen} />
             </div>
         </div>
         <div class="pomodoro-settings-item">
             <div class="pomodoro-settings-label">Meditate</div>
             <div class="pomodoro-settings-control">
-                <input
-                    value={$settings.meditateLen}
-                    on:change={updateMeditateLen}
-                    min="0"
-                    type="number" />
+                <input type="number" min="0" bind:value={$settings.meditateLen} />
             </div>
         </div>
         <div class="pomodoro-settings-item">
@@ -79,15 +67,11 @@ const updateMeditateLen = (e: Event) => {
         <div class="pomodoro-settings-item">
             <div class="pomodoro-settings-label">Notification Sound</div>
             <div class="pomodoro-settings-control">
-                <input
-                    type="checkbox"
-                    bind:checked={$settings.notificationSound} />
+                <input type="checkbox" bind:checked={$settings.notificationSound} />
             </div>
         </div>
         <div class="pomodoro-settings-item">
-            <div class="pomodoro-settings-label">
-                Prefer Saving to Task File
-            </div>
+            <div class="pomodoro-settings-label">Prefer Saving to Task File</div>
             <div class="pomodoro-settings-control">
                 <input type="checkbox" bind:checked={$settings.logFocused} />
             </div>

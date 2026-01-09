@@ -9,7 +9,7 @@ import DEFAULT_NOTIFICATION from 'Notification'
 import type { Unsubscriber } from 'svelte/motion'
 import type { TaskItem } from 'Tasks'
 
-export type Mode = 'WORK' | 'BREAK' | 'MEDITATE' // Mode 추가
+export type Mode = 'WORK' | 'BREAK' | 'MEDITATE'
 
 export type TimerRemained = {
     millis: number
@@ -99,10 +99,10 @@ export default class Timer implements Readable<TimerStore> {
 
         this.update = store.update
 
-        this.store = derived(store, ($state) => ({
-            ...$state,
-            remained: this.remain($state.count, $state.elapsed),
-            finished: $state.count == $state.elapsed,
+        this.store = derived(store, ($store) => ({
+            ...$store,
+            remained: this.remain($store.count, $store.elapsed),
+            finished: $store.count == $store.elapsed,
         }))
 
         this.subscribe = this.store.subscribe
@@ -168,9 +168,7 @@ export default class Timer implements Readable<TimerStore> {
 
     private createLogContext(s: TimerState): LogContext {
         let state = { ...s }
-        let task = this.plugin.tracker?.task
-            ? { ...this.plugin.tracker.task }
-            : { ...DEFAULT_TASK }
+        let task = this.plugin.tracker?.task ? { ...this.plugin.tracker.task } : { ...DEFAULT_TASK }
 
         if (!task.path) {
             task.path = this.plugin.tracker?.file?.path ?? ''
@@ -195,11 +193,7 @@ export default class Timer implements Readable<TimerStore> {
                 // new session
                 s.elapsed = 0
                 s.duration =
-                    s.mode === 'WORK'
-                        ? s.workLen
-                        : s.mode === 'BREAK'
-                          ? s.breakLen
-                          : s.meditateLen
+                    s.mode === 'WORK' ? s.workLen : s.mode === 'BREAK' ? s.breakLen : s.meditateLen
                 s.count = s.duration * 60 * 1000
                 s.startTime = now
             }
@@ -219,11 +213,7 @@ export default class Timer implements Readable<TimerStore> {
             state.mode = 'WORK'
         } else {
             state.mode =
-                state.mode == 'WORK'
-                    ? 'BREAK'
-                    : state.mode == 'BREAK'
-                      ? 'MEDITATE'
-                      : 'WORK'
+                state.mode == 'WORK' ? 'BREAK' : state.mode == 'BREAK' ? 'MEDITATE' : 'WORK'
         }
         state.duration =
             state.mode == 'WORK'
@@ -244,19 +234,13 @@ export default class Timer implements Readable<TimerStore> {
     }
 
     private notify(state: TimerState, logFile: TFile | void) {
-        const emoji =
-            state.mode == 'WORK' ? '📘' : state.mode == 'BREAK' ? '☕' : '🧘‍♂️'
+        const emoji = state.mode == 'WORK' ? '📘' : state.mode == 'BREAK' ? '☕' : '🧘‍♂️'
         const text = `${emoji} You have been ${
-            state.mode === 'WORK'
-                ? 'working'
-                : state.mode == 'BREAK'
-                  ? 'breaking'
-                  : 'meditating'
+            state.mode === 'WORK' ? 'working' : state.mode == 'BREAK' ? 'breaking' : 'meditating'
         } for ${state.duration} minutes.`
 
         if (this.plugin.getSettings().useSystemNotification) {
-            const Notification = (require('electron') as any).remote
-                .Notification
+            const Notification = (require('electron') as any).remote.Notification
             const sysNotification = new Notification({
                 title: 'Pomodoro Timer',
                 body: text,
@@ -344,11 +328,9 @@ export default class Timer implements Readable<TimerStore> {
         let audio = Timer.DEFAULT_NOTIFICATION_AUDIO
         let customSound = this.plugin.getSettings().customSound
         if (customSound) {
-            const soundFile =
-                this.plugin.app.vault.getAbstractFileByPath(customSound)
+            const soundFile = this.plugin.app.vault.getAbstractFileByPath(customSound)
             if (soundFile && soundFile instanceof TFile) {
-                const soundSrc =
-                    this.plugin.app.vault.getResourcePath(soundFile)
+                const soundSrc = this.plugin.app.vault.getResourcePath(soundFile)
                 audio = new Audio(soundSrc)
             }
         }
@@ -357,8 +339,7 @@ export default class Timer implements Readable<TimerStore> {
 
     public setupTimer() {
         this.update((state) => {
-            const { workLen, breakLen, meditateLen, autostart } =
-                this.plugin.getSettings()
+            const { workLen, breakLen, meditateLen, autostart } = this.plugin.getSettings()
             state.workLen = workLen
             state.breakLen = breakLen
             state.meditateLen = meditateLen

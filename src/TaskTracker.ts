@@ -2,12 +2,7 @@ import { type TaskItem } from 'Tasks'
 import type PomodoroTimerPlugin from 'main'
 import { TFile, Keymap, MarkdownView } from 'obsidian'
 import { DESERIALIZERS, POMODORO_REGEX } from 'serializer'
-import {
-    writable,
-    type Readable,
-    type Writable,
-    type Unsubscriber,
-} from 'svelte/store'
+import { writable, type Readable, type Writable, type Unsubscriber } from 'svelte/store'
 import { extractTaskComponents } from 'utils'
 
 export type TaskTrackerState = {
@@ -142,9 +137,7 @@ export default class TaskTracker implements TaskTrackerStore {
 
     public openFile(event: MouseEvent) {
         if (this.state.file) {
-            const leaf = this.plugin.app.workspace.getLeaf(
-                Keymap.isModEvent(event),
-            )
+            const leaf = this.plugin.app.workspace.getLeaf(Keymap.isModEvent(event))
             leaf.openFile(this.state.file)
         }
     }
@@ -152,9 +145,7 @@ export default class TaskTracker implements TaskTrackerStore {
     public openTask = (event: MouseEvent, task: TaskItem) => {
         let file = this.plugin.app.vault.getAbstractFileByPath(task.path)
         if (file && file instanceof TFile && task.line >= 0) {
-            const leaf = this.plugin.app.workspace.getLeaf(
-                Keymap.isModEvent(event),
-            )
+            const leaf = this.plugin.app.workspace.getLeaf(Keymap.isModEvent(event))
             leaf.openFile(file, { eState: { line: task.line } })
         }
     }
@@ -172,10 +163,7 @@ export default class TaskTracker implements TaskTrackerStore {
     }
 
     public sync(task: TaskItem) {
-        if (
-            this.state.task?.blockLink &&
-            this.state.task.blockLink === task.blockLink
-        ) {
+        if (this.state.task?.blockLink && this.state.task.blockLink === task.blockLink) {
             this.store.update((state) => {
                 if (state.task) {
                     let name = state.task.name
@@ -188,14 +176,8 @@ export default class TaskTracker implements TaskTrackerStore {
 
     public async updateActual() {
         // update task item
-        if (
-            this.plugin.getSettings().enableTaskTracking &&
-            this.task &&
-            this.task.blockLink
-        ) {
-            let file = this.plugin.app.vault.getAbstractFileByPath(
-                this.task.path,
-            )
+        if (this.plugin.getSettings().enableTaskTracking && this.task && this.task.blockLink) {
+            let file = this.plugin.app.vault.getAbstractFileByPath(this.task.path)
             if (file && file instanceof TFile) {
                 let f = file as TFile
                 this.store.update((state) => {
@@ -250,33 +232,19 @@ export default class TaskTracker implements TaskTrackerStore {
                         if (expected !== undefined) {
                             text += `/${expected.trim()}`
                         }
-                        line = line
-                            .replace(/🍅:: *(\d* *\/? *\d* *)/, text)
-                            .trim()
+                        line = line.replace(/🍅:: *(\d* *\/? *\d* *)/, text).trim()
                     } else {
-                        let detail = DESERIALIZERS[format].deserialize(
-                            components.body,
-                        )
-                        line = line.replace(
-                            detail.description,
-                            `${detail.description} [🍅:: 1]`,
-                        )
+                        let detail = DESERIALIZERS[format].deserialize(components.body)
+                        line = line.replace(detail.description, `${detail.description} [🍅:: 1]`)
                     }
 
                     lines[lineNr] = line
 
                     await this.plugin.app.vault.modify(file, lines.join('\n'))
 
-                    this.plugin.app.metadataCache.trigger(
-                        'changed',
-                        file,
-                        content,
-                        metadata,
-                    )
+                    this.plugin.app.metadataCache.trigger('changed', file, content, metadata)
 
-                    this.plugin.app.workspace
-                        .getActiveViewOfType(MarkdownView)
-                        ?.load()
+                    this.plugin.app.workspace.getActiveViewOfType(MarkdownView)?.load()
                     break
                 }
             }
