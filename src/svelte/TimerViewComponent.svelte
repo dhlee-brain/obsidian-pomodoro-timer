@@ -322,6 +322,6 @@ const toggleExtra = (value: 'settings' | 'tasks') => {
     right: 0px;
     color: var(--pomodoro-timer-text-color);
     gap: 8px;
-    font-size: 1px;
+    font-size: 12px;
 }
 </style>
