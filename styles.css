@@ -9,8 +9,8 @@ If your plugin does not need CSS, delete this file.
 
 .theme-light,
 .theme-dark {
-    --pomodoro-timer-elapsed-color: var(--color-green);
-    --pomodoro-timer-color: var(--text-faint);
+    --pomodoro-timer-elapsed-color: #e69000;
+    --pomodoro-timer-color: var(--color-purple);
     --pomodoro-timer-text-color: var(--text-normal);
     --pomodoro-timer-dot-color: var(--color-red);
 }

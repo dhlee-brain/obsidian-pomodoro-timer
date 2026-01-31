@@ -71,11 +71,7 @@ const toggleExtra = (value: 'settings' | 'tasks') => {
                     </span>
                 </div>
             </div>
-            <svg
-                class="timer"
-                width="160"
-                height="160"
-                xmlns="http://www.w3.org/2000/svg">
+            <svg class="timer" width="160" height="160" xmlns="http://www.w3.org/2000/svg">
                 <g>
                     <circle
                         class="circle_timer"
@@ -94,6 +90,10 @@ const toggleExtra = (value: 'settings' | 'tasks') => {
                         style="stroke-dashoffset: {strokeOffset}" />
                 </g>
             </svg>
+            <div class="record-group">
+                일어나기
+                <input type="checkbox" />
+            </div>
         </div>
         <div class="btn-group">
             <span
@@ -112,9 +112,8 @@ const toggleExtra = (value: 'settings' | 'tasks') => {
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     class="lucide lucide-list-todo"
-                    ><rect x="3" y="5" width="6" height="6" rx="1" /><path
-                        d="m3 17 2 2 4-4" /><path d="M13 6h8" /><path
-                        d="M13 12h8" /><path d="M13 18h8" /></svg>
+                    ><rect x="3" y="5" width="6" height="6" rx="1" /><path d="m3 17 2 2 4-4" /><path
+                        d="M13 6h8" /><path d="M13 12h8" /><path d="M13 18h8" /></svg>
             </span>
 
             {#if !$timer.running}
@@ -129,8 +128,7 @@ const toggleExtra = (value: 'settings' | 'tasks') => {
                         stroke-width="2"
                         stroke-linecap="round"
                         stroke-linejoin="round"
-                        class="lucide lucide-play"
-                        ><polygon points="5 3 19 12 5 21 5 3" /></svg>
+                        class="lucide lucide-play"><polygon points="5 3 19 12 5 21 5 3" /></svg>
                 </span>
             {:else}
                 <span on:click={pause} class="control">
@@ -164,8 +162,7 @@ const toggleExtra = (value: 'settings' | 'tasks') => {
                     stroke-linecap="round"
                     stroke-linejoin="round"
                     class="lucide lucide-rotate-ccw"
-                    ><path
-                        d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path
+                    ><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" /><path
                         d="M3 3v5h5" /></svg>
             </span>
             <span
@@ -314,5 +311,17 @@ const toggleExtra = (value: 'settings' | 'tasks') => {
     50% {
         opacity: 0;
     }
+}
+
+.record-group {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    line-height: 1;
+    bottom: 0px;
+    right: 0px;
+    color: var(--pomodoro-timer-text-color);
+    gap: 8px;
+    font-size: 1px;
 }
 </style>

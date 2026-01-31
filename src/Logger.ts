@@ -68,14 +68,8 @@ export default class Logger {
         }
 
         // focused file has the highest priority
-        if (
-            settings.logFocused &&
-            ctx.task.path &&
-            ctx.task.path.endsWith('md')
-        ) {
-            const file = this.plugin.app.vault.getAbstractFileByPath(
-                ctx.task.path,
-            )
+        if (settings.logFocused && ctx.task.path && ctx.task.path.endsWith('md')) {
+            const file = this.plugin.app.vault.getAbstractFileByPath(ctx.task.path)
             if (file && file instanceof TFile) {
                 return file
             }
@@ -129,10 +123,7 @@ export default class Logger {
 
     private async toText(log: TimerLog, file: TFile): Promise<string> {
         const settings = this.plugin.getSettings()
-        if (
-            settings.logFormat === 'CUSTOM' &&
-            utils.getTemplater(this.plugin.app)
-        ) {
+        if (settings.logFormat === 'CUSTOM' && utils.getTemplater(this.plugin.app)) {
             // use templater
             try {
                 return await utils.parseWithTemplater(
@@ -148,30 +139,25 @@ export default class Logger {
             }
         } else {
             // Built-in log: ignore unfinished session
-            if (!log.finished) {
-                return ''
-            }
+            // if (!log.finished) {
+            //     return ''
+            // }
 
             let begin = moment(log.begin)
             let end = moment(log.end)
             if (settings.logFormat === 'SIMPLE') {
-                return `**${log.mode}(${log.duration}m)**: ${begin.format(
+                return `**${log.mode}(${log.duration}m)**: ${begin.format('HH:mm')} - ${end.format(
                     'HH:mm',
-                )} - ${end.format('HH:mm')}`
+                )}`
             }
 
             if (settings.logFormat === 'VERBOSE') {
-                const emoji =
-                    log.mode == 'WORK'
-                        ? '📘'
-                        : log.mode == 'BREAK'
-                          ? '☕'
-                          : '🧘‍♂️'
+                const emoji = log.mode == 'WORK' ? '📘' : log.mode == 'BREAK' ? '☕' : '🧘‍♂️'
                 return `- ${emoji} (pomodoro::${log.mode}) (duration:: ${
                     log.duration
-                }m) (begin:: ${begin.format(
+                }m) (begin:: ${begin.format('YYMMDD HH:mm')}) - (end:: ${end.format(
                     'YYMMDD HH:mm',
-                )}) - (end:: ${end.format('YYMMDD HH:mm')})`
+                )})`
             }
 
             return ''
